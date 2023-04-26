@@ -61,4 +61,34 @@ public class CarService {
             return carList;
         });
     }
+
+    public long getTotalCount() {
+        return carRepo.count();
+    }
+
+    public Page<CarResponse> getCarsByColumnAndValue(String column, String val, Pageable pageable) {
+        Page<Car> cars;
+        switch (column) {
+            case "brand":
+                cars = carRepo.findByBrand(val, pageable);
+                break;
+            case "model":
+                cars = carRepo.findByModel(val, pageable);
+                break;
+            case "color":
+                cars = carRepo.findByColor(val, pageable);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid column: " + column);
+        }
+        return cars.map(car -> {
+            CarResponse carList = new CarResponse();
+            carList.setId(car.getId());
+            carList.setBrand(car.getBrand());
+            carList.setModel(car.getModel());
+            carList.setColor(car.getColor());
+            carList.setKilometers(car.getKilometers());
+            return carList;
+        });
+    }
 }

@@ -12,4 +12,10 @@ import org.springframework.stereotype.Repository;
 public interface CarRepo extends JpaRepository<Car, Integer> {
     @Query("SELECT c FROM Car c WHERE c.brand = :brand")
     Page<Car> findByBrand(String brand, Pageable pageable);
+
+    long count();
+
+    Page<Car> findByModel(String val, Pageable pageable);
+
+    Page<Car> findByColor(String val, Pageable pageable);
 }

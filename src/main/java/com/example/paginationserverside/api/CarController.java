@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,14 +27,32 @@ public class CarController {
     }
 
     @GetMapping("/sorted")
-    public ResponseEntity<Page<CarResponse>> getAllCarsSorted(@PageableDefault(size = 4, sort = {"brand", "kilometers"}, direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<CarResponse>> getAllCarsSorted(
+            @PageableDefault(size = 4, sort = {"brand", "kilometers"}, direction = Sort.Direction.ASC) Pageable pageable) {
         Page<CarResponse> carList = carService.getCarsByPage(pageable);
         return ResponseEntity.ok(carList);
     }
 
     @GetMapping("/brand/{brand}")
-    public ResponseEntity<Page<CarResponse>> getCarsByBrand(@PathVariable String brand, @PageableDefault(size = 3, sort = "brand", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<CarResponse>> getCarsByBrand(
+            @PathVariable String brand,
+            @PageableDefault(size = 3, sort = "brand", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<CarResponse> carList = carService.getCarsByBrand(brand, pageable);
+        return ResponseEntity.ok(carList);
+    }
+
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCount() {
+        long totalCount = carService.getTotalCount();
+        return ResponseEntity.ok(totalCount);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<CarResponse>> getCarsByColumnAndValue(
+            @RequestParam String column,
+            @RequestParam String val,
+            @PageableDefault(size = 5, sort = "brand", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<CarResponse> carList = carService.getCarsByColumnAndValue(column, val, pageable);
         return ResponseEntity.ok(carList);
     }
 }
