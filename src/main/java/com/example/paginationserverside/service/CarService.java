@@ -21,74 +21,38 @@ public class CarService {
 
     public List<CarResponse> getAllCars() {
         List<Car> cars = carRepo.findAll();
-        return cars.stream().map(car -> {
-            CarResponse carResponse = new CarResponse();
-            carResponse.setId(car.getId());
-            carResponse.setBrand(car.getBrand());
-            carResponse.setModel(car.getModel());
-            carResponse.setColor(car.getColor());
-            carResponse.setKilometers(car.getKilometers());
-            carResponse.setCreated(car.getCreated());
-            carResponse.setUpdated(car.getUpdated());
-            return carResponse;
-        }).collect(Collectors.toList());
+        return cars.stream().map(CarResponse::new).collect(Collectors.toList());
     }
 
     public Page<CarResponse> getCarsByPage(Pageable pageable) {
         Page<Car> cars = carRepo.findAll(pageable);
-        return cars.map(car -> {
-            CarResponse carResponse = new CarResponse();
-            carResponse.setId(car.getId());
-            carResponse.setBrand(car.getBrand());
-            carResponse.setModel(car.getModel());
-            carResponse.setColor(car.getColor());
-            carResponse.setKilometers(car.getKilometers());
-            carResponse.setCreated(car.getCreated());
-            carResponse.setUpdated(car.getUpdated());
-            return carResponse;
-        });
+        return cars.map(CarResponse::new);
     }
 
     public Page<CarResponse> getCarsByBrand(String brand, Pageable pageable) {
         Page<Car> cars = carRepo.findByBrand(brand, pageable);
-        return cars.map(car -> {
-            CarResponse carList = new CarResponse();
-            carList.setId(car.getId());
-            carList.setBrand(car.getBrand());
-            carList.setModel(car.getModel());
-            carList.setColor(car.getColor());
-            carList.setKilometers(car.getKilometers());
-            return carList;
-        });
+        return cars.map(CarResponse::new);
     }
 
     public long getTotalCount() {
         return carRepo.count();
     }
 
-    public Page<CarResponse> getCarsByColumnAndValue(String column, String val, Pageable pageable) {
+    public Page<CarResponse> getCarsByColumnAndValue(String column, String value, Pageable pageable) {
         Page<Car> cars;
         switch (column) {
             case "brand":
-                cars = carRepo.findByBrand(val, pageable);
+                cars = carRepo.findByBrand(value, pageable);
                 break;
             case "model":
-                cars = carRepo.findByModel(val, pageable);
+                cars = carRepo.findByModel(value, pageable);
                 break;
             case "color":
-                cars = carRepo.findByColor(val, pageable);
+                cars = carRepo.findByColor(value, pageable);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid column: " + column);
+                throw new IllegalArgumentException("Invalid column type: " + column);
         }
-        return cars.map(car -> {
-            CarResponse carList = new CarResponse();
-            carList.setId(car.getId());
-            carList.setBrand(car.getBrand());
-            carList.setModel(car.getModel());
-            carList.setColor(car.getColor());
-            carList.setKilometers(car.getKilometers());
-            return carList;
-        });
+        return cars.map(CarResponse::new);
     }
 }

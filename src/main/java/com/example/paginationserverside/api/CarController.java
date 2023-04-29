@@ -12,8 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/car")
 public class CarController {
 
@@ -50,9 +52,9 @@ public class CarController {
     @GetMapping("/filter")
     public ResponseEntity<Page<CarResponse>> getCarsByColumnAndValue(
             @RequestParam String column,
-            @RequestParam String val,
-            @PageableDefault(size = 5, sort = "brand", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<CarResponse> carList = carService.getCarsByColumnAndValue(column, val, pageable);
+            @RequestParam String value,
+            @PageableDefault(size = 12, sort = "brand", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<CarResponse> carList = carService.getCarsByColumnAndValue(column, value, pageable);
         return ResponseEntity.ok(carList);
     }
 }
